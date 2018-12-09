@@ -1,0 +1,25 @@
+spring annotation.
+一、给容器中添加bean
+1、包扫描+组件标注注解（@Controller/@Service/@Repository/@Component）
+2、@Bean[导入的第三方包里面的组件]
+3、@Import[快速给容器导入一个组件]
+  1）、@Import(要导入容器中的组件)；容器中就会自动注册这个组件，id默认是全类名
+  2）、ImportSelector:返回需要导入的组件的全类名数组；
+  3）、ImportBeanDefinitionRegistrar:手动注册bean到容器中
+4、使用Spring提供的FactoryBean(工厂Bean);
+  1)、默认获取到的是工厂bean调用getObject创建的对象
+  2）、要获取工厂Bean本身，我们需要给id前面加一个& 如：&colorFactoryBean
+二、Bean的生命周期
+1、bean的创建、初始化方法，销毁方法
+  1）自定义初始化销毁方法
+    @Bean(initMethod="init",destoryMethod="detory")
+    （1）单实例bean容器关闭即执行关销毁方法，多实例bean，容器关闭不执行销毁方法  
+  2）通过让Bean实现InitializingBean（实现初始化逻辑），DisposableBean（实现销毁逻辑）
+  3）可以使用JSR250（java规范注解）;
+       @PostConstruct ,在bean创建完成并且属性赋值完成，来执行初始化方法。
+       @PreDestroy,在容器销毁bean之前，来执行销毁逻辑
+  4）BeanPostProcessor【interface】;bean的后置处理器；
+     在bean初始化前后进行一些处理工作；
+     postProcessBeforeInitialization:在初始化之前工作
+     postProcessAfterInitialization:在初始化之后工作
+     例： MyBeanPostProcessor implements BeanPostProcessor{}
