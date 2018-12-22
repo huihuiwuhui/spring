@@ -23,17 +23,33 @@ spring annotation.
      postProcessBeforeInitialization:在初始化之前工作
      postProcessAfterInitialization:在初始化之后工作
      例： MyBeanPostProcessor implements BeanPostProcessor{}
-
 使用@PropertySource读取外部配置文件中的k/v保存到运行的环境变量中
 @PropertySource(value={"classpath:/person.properties"})   
 
+三、为属性赋值
+  1、@Value("")
+  2、@Value(#{});
+四、获取配置文件的值
+    @PropertySource(value={classpath:/}) 
+    @Value(${})      
+
+五、自动装配
+   Spring利用依赖注入（DI）,完成对IOC容器中各个组件的依赖关系赋值；
+  1、@Autowired :自动注入
+     1）默认优先按照类型去容器中找对应的组件：applicationContext.getBean( BookDao.class)
+     2)如果找到多个相同类型的组件，再将属性的名称作为id去容器中去查找
+     3）@Qualifier("bookDao"),使用@Qualifier指定需要装配的组件id,而不是使用组件名
+     4)、自定装配默认一定要将属性值赋好，没有就会报错；
+         可以使用@Autowired(required=false);
+     5)、@Primary,让Spring进行自动装配的时候、默认使用首选的bean;
+         也可以继续使用@Qualifier指定需要装配的bean名字
 自动装配
-2）、  Spring还支持使用@Resource(JSR250)和Inject(JSR330)[java规范的注解]
+ 2、  Spring还支持使用@Resource(JSR250)和Inject(JSR330)[java规范的注解]
       @Resource : 
          可以和@Autowired一样实现自动装配，默认使用组件名称
          没有能支持@Primar功能没有支持@Autowired(requried=false);
       @Inject:
           需要导入java.inject的包，和Autowired的功能一样，没有支持@Autowired(requried=false); 有@Primar功能
       @Autowired: Spring定义的；@Resource @Inject 都是java规范  
-      AutowiredAnnotationBeanPostProcessor:解析自动装配功能
-      
+      AutowiredAnnotationBeanPostProcessor:解析自动装配功能         
+
